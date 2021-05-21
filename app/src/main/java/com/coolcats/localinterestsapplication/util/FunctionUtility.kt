@@ -2,7 +2,6 @@ package com.coolcats.localinterestsapplication.util
 
 import android.location.Location
 import android.widget.SpinnerAdapter
-import com.coolcats.localinterestsapplication.util.Constants.Companion.RESTAURANT
 
 class FunctionUtility {
 

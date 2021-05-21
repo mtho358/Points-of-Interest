@@ -19,9 +19,8 @@ class GooglePlaceRetrofit {
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
 
-    fun makeApiCallAsync(type: String, keyWord: String, location: String, radius: Int): Deferred<PlacesResponse> {
+    fun makeApiCallAsync(keyWord: String, location: String, radius: Int): Deferred<PlacesResponse> {
         return placeEndPoint.getPlaces(
-            type,
             API_KEY,
             keyWord,
             location,
@@ -31,8 +30,7 @@ class GooglePlaceRetrofit {
 
     interface PlaceEndPoint{
         @GET("/maps/api/place/nearbysearch/json")
-        fun getPlaces(@Query("type") placeType: String,
-                      @Query("key") apiKey: String,
+        fun getPlaces(@Query("key") apiKey: String,
                       @Query("keyword") keyWord: String,
                       @Query("location") location: String,
                       @Query("radius") radius: Int ) : Deferred<PlacesResponse>

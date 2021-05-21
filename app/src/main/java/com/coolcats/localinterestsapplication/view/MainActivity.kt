@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var myLocation: Location
     private val viewModel: PlacesViewModel by viewModels()
     private val placesAdapter = PlacesAdapter(listOf())
+    private lateinit var selectedOption: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +37,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         options_spinner.adapter = spinnerAdapter
 
         options_spinner.onItemSelectedListener = this
+
+        viewModel.liveData.observe(this, {
+            placesAdapter.updatePlaces(it)
+        })
 
         places_recyclerview.adapter = placesAdapter
 
@@ -63,6 +68,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             5f,
             myLocationListener
         )
+
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -77,21 +83,24 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private val myLocationListener = MyLocationListener(
         object : MyLocationListener.LocationDelegate {
-        override fun provideLocation(location: Location) {
-            makeApiCall(location)
+        override fun provideLocation(location: Location){
+            myLocation = location
         }
     })
 
     private fun makeApiCall(location: Location) {
-        myLocation = location
-        viewModel.getPlacesNearMe(location)
+        viewModel.getPlacesNearMe(location, selectedOption)
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
-        viewModel.liveData.observe(this, {
-            placesAdapter.updatePlaces(it)
-        })
+        selectedOption = parent?.getItemAtPosition(position).toString()
+            if(this::myLocation.isInitialized) {
+                Log.d("TAG_M", selectedOption)
+                makeApiCall(myLocation)
+            }
+
+
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

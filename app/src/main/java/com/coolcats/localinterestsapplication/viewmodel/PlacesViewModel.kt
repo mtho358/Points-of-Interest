@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.coolcats.localinterestsapplication.GooglePlaceRetrofit
 import com.coolcats.localinterestsapplication.model.Result
-import com.coolcats.localinterestsapplication.util.Constants.Companion.RESTAURANT
 import com.coolcats.localinterestsapplication.util.FunctionUtility.Companion.toFormattedString
 import com.coolcats.localinterestsapplication.util.State
 import kotlinx.coroutines.Job
@@ -24,14 +23,13 @@ class PlacesViewModel : ViewModel(){
     val statusData = MutableLiveData<State>()
 
 
-    fun getPlacesNearMe(location: Location){
+    fun getPlacesNearMe(location: Location, type: String){
         statusData.value = State.LOADING
 
         netJob = viewModelScope.launch {
             try{
                 val result = retrofit.makeApiCallAsync(
-                    "*", //Replace with value from spinner
-                    "*",
+                    type, //Replace with value from spinner
                     location.toFormattedString(),
                     1000
                 ).await()
