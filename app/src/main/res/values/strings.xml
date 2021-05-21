@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Local Interests Application</string>
+
+    <string-array name="options_list" >
+        <item>Restaurant</item>
+        <item>Supermarkets</item>
+        <item>Gas Stations</item>
+    </string-array>
+</resources>

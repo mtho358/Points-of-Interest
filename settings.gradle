@@ -1,0 +1,2 @@
+rootProject.name = "Local Interests Application"
+include ':app'
