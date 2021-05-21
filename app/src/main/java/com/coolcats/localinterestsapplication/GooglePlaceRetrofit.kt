@@ -35,4 +35,13 @@ class GooglePlaceRetrofit {
                       @Query("location") location: String,
                       @Query("radius") radius: Int ) : Deferred<PlacesResponse>
     }
+
+    //https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
+    interface GeoEndPoint{
+        @GET("maps/api/geocode/json")
+        fun getAddress(
+            @Query("key") apiKey: String,
+            @Query("latLong") ltln : String
+        )
+    }
 }
