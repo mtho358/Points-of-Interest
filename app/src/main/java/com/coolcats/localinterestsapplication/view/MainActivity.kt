@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             placesAdapter.updatePlaces(it)
         })
 
+        viewModel.geoData.observe(this, {
+            location_textview.text = it.formatted_address
+        })
+
         places_recyclerview.adapter = placesAdapter
 
         viewModel.statusData.observe(this, {
@@ -68,7 +72,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             5f,
             myLocationListener
         )
-
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -90,6 +93,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun makeApiCall(location: Location) {
         viewModel.getPlacesNearMe(location, selectedOption)
+        //viewModel.getMyLocation(location)
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -99,8 +103,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 Log.d("TAG_M", selectedOption)
                 makeApiCall(myLocation)
             }
-
-
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

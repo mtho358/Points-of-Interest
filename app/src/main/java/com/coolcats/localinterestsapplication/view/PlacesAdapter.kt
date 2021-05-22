@@ -29,7 +29,7 @@ class PlacesAdapter(private var placesList: List<Result>): RecyclerView.Adapter<
         placesList[position].let {
             holder.itemView.apply {
                 business_name_textview.text = it.name
-                business_address_textview.text = it.geometry.location.toString()
+                business_address_textview.text = it.vicinity
             }
 
         }

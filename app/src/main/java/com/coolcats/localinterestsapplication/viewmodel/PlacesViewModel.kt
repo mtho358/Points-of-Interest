@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.coolcats.localinterestsapplication.GooglePlaceRetrofit
 import com.coolcats.localinterestsapplication.model.Result
+import com.coolcats.localinterestsapplication.model.ResultX
 import com.coolcats.localinterestsapplication.util.FunctionUtility.Companion.toFormattedString
 import com.coolcats.localinterestsapplication.util.State
 import kotlinx.coroutines.Job
@@ -20,8 +21,24 @@ class PlacesViewModel : ViewModel(){
 
     val liveData: MutableLiveData<List<Result>> = MutableLiveData()
 
+    val geoData = MutableLiveData<ResultX>()
+
     val statusData = MutableLiveData<State>()
 
+    fun getMyLocation(location: Location){
+        statusData.value = State.LOADING
+        netJob = viewModelScope.launch {
+            try{
+                val result = retrofit.getBusinessAddressAsync(location.toFormattedString()).await()
+                geoData.postValue(result.results[0])
+                Log.d("TAG_M", "${geoData.value}")
+                statusData.postValue(State.SUCCESS)
+            }catch (e: Exception){
+                Log.e("TAG_M", "An error occured: $e")
+                statusData.postValue(State.ERROR)
+            }
+        }
+    }
 
     fun getPlacesNearMe(location: Location, type: String){
         statusData.value = State.LOADING
@@ -41,7 +58,6 @@ class PlacesViewModel : ViewModel(){
             }
         }
     }
-
 
     override fun onCleared() {
         netJob?.cancel()
